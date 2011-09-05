@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="integerationTest" default="build.xml" basedir=".">
 
-	<tstamp></tstamp>
+	<tstamp>
+		<format property="time" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+	</tstamp>
 	<property name="commit-message" value="ant update (${TSTAMP})"/>
 	<target name="build.xml" description="Commits all changes to version git">
 		<git command="pull" />
