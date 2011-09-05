@@ -4,7 +4,6 @@
 	<property name="commit-message" value="ant update"/>
 	<target name="build.xml" description="Commits all changes to version git">
 		<git command="pull" />
-		<echo message="nuclearfusion" />
 		<echo message="Commiting all changes with message ${commit-message}" />
 		<git command="add">
 			<args>
