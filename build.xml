@@ -4,7 +4,7 @@
 	<tstamp>
 		<format property="time" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 	</tstamp>
-	<property name="commit-message" value="ant update (${TSTAMP})"/>
+	<property name="commit-message" value="ant update (${time})"/>
 	<target name="build.xml" description="Commits all changes to version git">
 		<git command="pull" />
 		<echo message="Commiting all changes with message ${commit-message}" />
