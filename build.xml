@@ -22,6 +22,7 @@
 		<git command="push" />
 	</target>
 	
+	<echo message="Build complete, starting testing " />
 	<target name="test" depends="build.xml" description="Commits all changes to version git">
 	
 	</target>
