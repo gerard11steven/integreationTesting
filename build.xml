@@ -23,6 +23,8 @@
 	</target>
 	
 	<target name="test" depends="build.xml" description="start da testing!!">
+		<input message="Enter test number (used to create the results file):" addproperty="newResults" />
+		<echo>Selenium Test Suite</echo>
 		<echo>"Build complete, starting testing"</echo>
 	
 	</target>
