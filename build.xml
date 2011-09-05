@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="integerationTest" default="build" basedir=".">
-	<property name="seleniumDir" location="path to selenium core under web root (no ending slash)" />
+	<property name="seleniumDir" location="${basedir}" />
 	<property name="startURL" location="C:\inetpub\wwwroot\integerationTest\Selenium" />
 	<property name="resultsDir" location="C:\inetpub\wwwroot\integerationTest\results" />
 	<property name="ie" value="*iexplore C:\Program Files\Internet Explorer\iexplore.exe" />
@@ -35,8 +35,14 @@
 	
 	<echo>"Build complete, starting testing"</echo>
 	<target name="test" depends="build" description="start da testing!!">
-		<input message="Enter test number (used to create the results file):" addproperty="newResults" />
-	
+		<!--input message="Enter test number (used to create the results file):" addproperty="newResults" /-->
+		<selenese 
+        suite="${seleniumDir}\tests\testsuite.cfm"
+        browser="${targetBrowser}"		
+        results="${resultsDir}\${newResults}.html"
+        timeoutInSeconds="120"
+		javaScriptCoreDir="${seleniumDir}"
+		 />
 	</target>
 	
 	<macrodef name="git">
