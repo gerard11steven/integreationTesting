@@ -23,7 +23,7 @@
 	</target>
 	
 	<target name="test" depends="build.xml" description="start da testing!!">
-		<echo message="Build complete, starting testing"/>
+		<echo>"Build complete, starting testing"</echo>
 	
 	</target>
 	
