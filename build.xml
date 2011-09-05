@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="integerationTest" default="build.xml" basedir=".">
 
-	<property name="commit-message" value="ant update"/>
+	<tstamp></tstamp>
+	<property name="commit-message" value="ant update (${TSTAMP})"/>
 	<target name="build.xml" description="Commits all changes to version git">
 		<git command="pull" />
 		<echo message="Commiting all changes with message ${commit-message}" />
