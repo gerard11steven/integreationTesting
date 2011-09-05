@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="integerationTest" default="gitpush" basedir=".">
+<project name="integerationTest" default="build.xml" basedir=".">
 
-	<target name="gitpush" description="Commits all changes to version git">
+	<property name="commit-message" value="ant update"/>
+	<target name="build.xml" description="Commits all changes to version git">
 		<git command="pull" />
-		<input message="Commit message" addproperty="commit-message" />
+		<echo message="nuclearfusion" />
 		<echo message="Commiting all changes with message ${commit-message}" />
 		<git command="add">
 			<args>
