@@ -2,7 +2,7 @@
 	Hello World<br>
 </cfoutput>
 
-<cfloop from="0" to="10" index="i">
+<cfloop from="0" to="3" index="i">
 	<cfoutput>#i#<br></cfoutput>
 </cfloop>
 
