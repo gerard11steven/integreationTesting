@@ -23,7 +23,7 @@
 	</target>
 	
 	<target name="test" depends="build.xml" description="Commits all changes to version git">
-		<echo message="Build complete, starting testing " />
+		<echo message="Build complete, starting testing" />
 	
 	</target>
 	
