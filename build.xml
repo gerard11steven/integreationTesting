@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="integerationTest" default="build" basedir=".">
+	<tstamp>
+		<format property="time" pattern="MM/dd/yyyy HH:mm:ss"/>
+		<format property="date" pattern="MM-dd-yyyy-HH.mm.ss"/>
+	</tstamp>
 	<property name="seleniumDir" location="${basedir}" />
-	<property name="startURL" location="C:\inetpub\wwwroot\integerationTest\Selenium" />
 	<property name="resultsDir" location="C:\inetpub\wwwroot\integerationTest\results" />
 	<property name="ie" value="*iexplore C:\Program Files\Internet Explorer\iexplore.exe" />
 	<property name="ff" value="*firefox C:\Program Files (x86)\Mozilla Firefox\firefox.exe" />
 	<property name="targetBrowser" value="${ie}" />
+	<property name="newResults" value="report_(${date})" />
 	
-	<tstamp>
-		<format property="time" pattern="MM/dd/yyyy HH:mm:ss"/>
-	</tstamp>
 	<taskdef resource="selenium-ant.properties">
         <classpath>
             <pathelement location="Selenium\selenium-server.jar"/>
@@ -35,12 +36,14 @@
 	
 	<echo>"Build complete, starting testing"</echo>
 	<target name="test" depends="build" description="start da testing!!">
+	<!--<target name="build" description="start da testing!!">-->
 		<!--input message="Enter test number (used to create the results file):" addproperty="newResults" /-->
 		<selenese 
         suite="${seleniumDir}\tests\testsuite.cfm"
         browser="${targetBrowser}"		
         results="${resultsDir}\${newResults}.html"
         timeoutInSeconds="120"
+		startURL="http://constantine.play/integerationTest/"
 		javaScriptCoreDir="${seleniumDir}"
 		 />
 	</target>
