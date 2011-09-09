@@ -16,23 +16,38 @@
             <pathelement location="Selenium\selenium-server.jar"/>
         </classpath>
     </taskdef>
-	
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	  <classpath>
+	    <pathelement location="C:\Program Files\apache-ant-1.8.2\lib\ant-contrib.jar" />
+	  </classpath>
+	</taskdef>
+
 	<property name="commit-message" value="ant update (${time})"/>
 	<target name="build" description="Commits all changes to version git">
 		<git command="pull" />
+		<echo>"Build complete..."</echo>
+		<if>
+			<not><equals arg1="${ret}" arg2="Already up-to-date.\n" /></not>
+			<then>
+				<property name="test" value="no"/>
+				<echo>"No change: don't test"</echo>
+			</then>
+			<else>
+				<echo>"Oooo upgrades: test time"</echo>
+			</else>
+		</if>
 	</target>
 	
-	<echo>"Build complete, starting testing"</echo>
-	<target name="test" depends="build" description="start da testing!!">
-	<!--<target name="build" description="start da testing!!">-->
-		<!--input message="Enter test number (used to create the results file):" addproperty="newResults" /-->
+	
+	<target name="test" depends="build" description="start da testing!!" unless="test.set">
+		<echo>"Starting testing"</echo>
 		<selenese 
-        suite="${seleniumDir}\tests\testsuite.cfm"
-        browser="${targetBrowser}"		
-        results="${resultsDir}\${newResults}.html"
-        timeoutInSeconds="120"
-		startURL="http://constantine.play/integerationTest/"
-		javaScriptCoreDir="${seleniumDir}"
+        	suite="${seleniumDir}\tests\testsuite.cfm"
+        	browser="${targetBrowser}"		
+        	results="${resultsDir}\${newResults}.html"
+        	timeoutInSeconds="120"
+			startURL="http://constantine.play/integerationTest/"
+			javaScriptCoreDir="${seleniumDir}"
 		 />
 	</target>
 	
@@ -41,8 +56,8 @@
 		<attribute name="dir" default="" />
 		<element name="args" optional="true" />
 		<sequential>
-			<echo message="git @{command}" />
-			<exec executable="git" dir="@{dir}">
+			<echo message="git @{command}"/>
+			<exec executable="git" dir="@{dir}" resolveexecutable="false" outputproperty="ret"> <!-- spawn="true" -->
 				<arg value="@{command}" />
 				<args/>
 			</exec>
