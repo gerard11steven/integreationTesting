@@ -25,7 +25,7 @@
 	<property name="commit-message" value="ant update (${time})"/>
 	<target name="build" description="Commits all changes to version git">
 		<git command="pull" />
-		<echo>"Build complete..."</echo>
+		<echo>"Build complete... ${ret}"</echo>
 		<if>
 			<not><equals arg1="${ret}" arg2="Already up-to-date.\n" /></not>
 			<then>
