@@ -26,16 +26,16 @@
 	<target name="doit" depends="initRead" description="emails results of testing to the dev team">
 		<antcallback target="gitpull" return="test, status, msg" />
 		<if>
-			<not><equals arg1="${test}" arg2="no" /></not>
+			<equals arg1="${test}" arg2="yes" />
 			<then>
 				<antcallback target="test" return="status, msg" />
 				<waitfor maxwait="30" maxwaitunit="second">
 				        <available file="${resultsDir}\${newResults}.html"/>
 				</waitfor>
-				<readTest file="${resultsDir}\${newResults}.html" type="status" />
-				<property name="status" value="${ret}" />
-				<readTest file="${resultsDir}\${newResults}.html" type="msg" />
-				<property name="msg" value="${ret}" />
+				<readTestStatus file="${resultsDir}\${newResults}.html" />
+				<!--property name="status" value="${ret}" /type="status" -->
+				<readTestMessage file="${resultsDir}\${newResults}.html" />
+				<!--property name="msg" value="${ret}" /  type="msg"-->
 
 				<mail mailhost="smtp.gmail.com" mailport="587" ssl="true" subject="Booking Boss build status for ${time}: ${status}"
 					user="gerard@bookingboss.com" password="coldfusion">
@@ -68,16 +68,16 @@
 			<then>
 				<property name="status" value="No Change" />
 				<property name="msg" value="Nothing to test" />
-				<property name="test" value="no" />
 				<echo>No change: don't test</echo>
 			</then>
 			<else>
+				<property name="test" value="yes" />
 				<echo>Oooo upgrades: test time</echo>
 			</else>
 		</if>
 	</target>
 	
-	<target name="test" description="start the testing!!" if="test.set">
+	<target name="test" description="start the testing!!">
 		<echo>"Starting testing"</echo>
 		<selenese 
         	suite="${seleniumDir}\tests\testsuite.cfm"
@@ -86,18 +86,28 @@
         	timeoutInSeconds="120"
 			startURL="http://constantine.play/integerationTest/"
 			javaScriptCoreDir="${seleniumDir}"
+			haltOnError="yes"
 		 />
 	</target>
 	
 	<target name="initRead">
-		<macrodef name="readTest">
+		<macrodef name="readTestStatus">
 			<attribute name="file" />
-			<attribute name="type" />
 			<sequential>
-				<exec executable="perl" dir="" resolveexecutable="false" outputproperty="ret">
+				<exec executable="perl" dir="" resolveexecutable="false" outputproperty="status">
 					<arg value="readTests.pl" />
 					<arg value="@{file}" />
-					<arg value="@{type}" />
+					<arg value="status" />
+				</exec>
+			</sequential>
+		</macrodef>
+		<macrodef name="readTestMessage">
+			<attribute name="file" />
+			<sequential>
+				<exec executable="perl" dir="" resolveexecutable="false" outputproperty="msg">
+					<arg value="readTests.pl" />
+					<arg value="@{file}" />
+					<arg value="msg" />
 				</exec>
 			</sequential>
 		</macrodef>

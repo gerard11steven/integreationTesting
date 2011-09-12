@@ -6,11 +6,22 @@ sub getMsg($);
 $n = $ARGV[0];
 $task = $ARGV[1];
 
+open(COUT, ">>out");
+
 if ($task eq "status") {
-	print getStatus($n);
+	$out = getStatus($n);
+	print $out;
+	print COUT "status: $out\n";
+} elsif ($task eq "msg") {
+	$out = getMsg($n);
+	print $out;
+	print COUT "msg: $out";
 } else {
-	print getMsg($n);
+	print "unknown request $task\n";
+	print COUT "unknown request $task\n";
 }
+
+close(COUT);
 
 sub getStatus($) {
 	$n = $_[0];
@@ -47,7 +58,7 @@ sub getMsg($) {
 	while ($i < @search && $l) {
 		if ($n != 0) {
 			$l =~ /^.*<td>(.*)<\/td>.*$/;
-			$out .= "\$\{line.separator\}$search[$i] = $1";
+			$out .= "\n$search[$i] = $1";
 			$n = 0;
 			$i += 1;
 		} elsif ($l =~ /^.*<td>$search[$i]:<\/td>.*$/) {
