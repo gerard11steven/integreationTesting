@@ -4,7 +4,7 @@
 		<format property="time" pattern="MM/dd/yyyy HH:mm:ss"/>
 		<format property="date" pattern="MM-dd-yyyy-HH.mm.ss"/>
 	</tstamp>
-	<property name="buildname" value="Booking Boss Gerards Dev" />
+	<property name="buildname" value="Gerards project Dev" />
 	<property name="seleniumDir" location="${basedir}" />
 	<property name="resultsDir" location="C:\inetpub\wwwroot\integerationTest\results" />
 	<property name="ie" value="*iexplore C:\Program Files\Internet Explorer\iexplore.exe" />
