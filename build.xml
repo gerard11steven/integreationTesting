@@ -28,20 +28,27 @@
 		<if>
 			<equals arg1="${test}" arg2="yes" />
 			<then>
-				<antcallback target="test" return="status, msg" />
+				<trycatch>
+					<try>
+						<antcallback target="test" return="status, msg" />
+					</try>
+					<catch>
+						<echo>Selenium failure</echo>
+					</catch>
+					<finally>
+					</finally>
+				</trycatch>
 				<waitfor maxwait="30" maxwaitunit="second">
 				        <available file="${resultsDir}\${newResults}.html"/>
 				</waitfor>
 				<readTestStatus file="${resultsDir}\${newResults}.html" />
-				<!--property name="status" value="${ret}" /type="status" -->
 				<readTestMessage file="${resultsDir}\${newResults}.html" />
-				<!--property name="msg" value="${ret}" /  type="msg"-->
 
 				<mail mailhost="smtp.gmail.com" mailport="587" ssl="true" subject="Booking Boss build status for ${time}: ${status}"
 					user="gerard@bookingboss.com" password="coldfusion">
 					<from address="gerard@bookingboss.com"/>
 					<to address="gerard@bookingboss.com"/>
-					<message>The ${buildname} nightly build has completed.${line.separator} Status: ${status}.${line.separator} Message: ${msg}</message>
+					<message>The ${buildname} nightly build has completed.${line.separator}Status: ${status}.${line.separator}Results: ${line.separator}${msg}</message>
 					<attachments>
 			    		<fileset dir="${resultsDir}">
 							<include name="${newResults}.html"/>
@@ -54,7 +61,7 @@
 					user="gerard@bookingboss.com" password="coldfusion">
 					<from address="gerard@bookingboss.com"/>
 					<to address="gerard@bookingboss.com"/>
-					<message>The ${buildname} nightly build has completed.${line.separator} Status: ${status}.${line.separator} Message: ${msg}</message>
+					<message>The ${buildname} nightly build has completed.${line.separator}Status: ${status}.${line.separator}Message: ${msg}</message>
 				</mail>
 			</else>
 		</if>
@@ -86,7 +93,6 @@
         	timeoutInSeconds="120"
 			startURL="http://constantine.play/integerationTest/"
 			javaScriptCoreDir="${seleniumDir}"
-			haltOnError="yes"
 		 />
 	</target>
 	

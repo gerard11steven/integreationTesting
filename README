@@ -7,5 +7,7 @@ Disclaimer: sometimes i have moments of brilliance and in which case this may en
 
 Status and completion:
 > 0.1 initial setup and readme addition
-> 1.0 git and ant integration: ant file successful posts to git
-> 2.0 ant and selenium integration successful: ant calls and runs selenium as required
+> 0.5 git and ant integration: ant file successful posts to git
+> 0.6 ant and selenium integration successful: ant calls and runs selenium as required
+> 0.7 added a perl script(running on active perl) to interface between the produced reports and the ant script
+> 1.0 bug fixes between ant-selenium-perl-ant complete for cases of no repository change, successful test and failure case of the tests

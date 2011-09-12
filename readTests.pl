@@ -6,22 +6,15 @@ sub getMsg($);
 $n = $ARGV[0];
 $task = $ARGV[1];
 
-open(COUT, ">>out");
-
 if ($task eq "status") {
 	$out = getStatus($n);
 	print $out;
-	print COUT "status: $out\n";
 } elsif ($task eq "msg") {
 	$out = getMsg($n);
 	print $out;
-	print COUT "msg: $out";
 } else {
 	print "unknown request $task\n";
-	print COUT "unknown request $task\n";
 }
-
-close(COUT);
 
 sub getStatus($) {
 	$n = $_[0];
@@ -46,7 +39,7 @@ sub getStatus($) {
 
 sub getMsg($) {
 	$n = $_[0];
-	$out = "hello";
+	$out = "\n";
 	@search = ("numTestTotal", "numTestPasses", "numTestFailures", "numCommandPasses", "numCommandFailures", "numCommandErrors");
 	if (!open("cin", $n)) {
 		$out = "Perl Error: cannot find file $n";
@@ -58,7 +51,7 @@ sub getMsg($) {
 	while ($i < @search && $l) {
 		if ($n != 0) {
 			$l =~ /^.*<td>(.*)<\/td>.*$/;
-			$out .= "\n$search[$i] = $1";
+			$out .= "\n    -> $search[$i] = $1";
 			$n = 0;
 			$i += 1;
 		} elsif ($l =~ /^.*<td>$search[$i]:<\/td>.*$/) {
