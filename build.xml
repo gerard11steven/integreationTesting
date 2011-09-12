@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="integerationTest" default="build" basedir=".">
+<project name="integerationTest" default="doit" basedir=".">
 	<tstamp>
 		<format property="time" pattern="MM/dd/yyyy HH:mm:ss"/>
 		<format property="date" pattern="MM-dd-yyyy-HH.mm.ss"/>
 	</tstamp>
+	<property name="buildname" value="Booking Boss Gerards Dev" />
 	<property name="seleniumDir" location="${basedir}" />
 	<property name="resultsDir" location="C:\inetpub\wwwroot\integerationTest\results" />
 	<property name="ie" value="*iexplore C:\Program Files\Internet Explorer\iexplore.exe" />
@@ -21,25 +22,62 @@
 	    <pathelement location="C:\Program Files\apache-ant-1.8.2\lib\ant-contrib.jar" />
 	  </classpath>
 	</taskdef>
-
-	<property name="commit-message" value="ant update (${time})"/>
-	<target name="build" description="Commits all changes to version git">
-		<git command="pull" />
-		<echo>"Build complete... ${ret}"</echo>
+	
+	<target name="doit" depends="initRead" description="emails results of testing to the dev team">
+		<antcallback target="gitpull" return="test, status, msg" />
 		<if>
-			<not><equals arg1="${ret}" arg2="Already up-to-date.\n" /></not>
+			<not><equals arg1="${test}" arg2="no" /></not>
 			<then>
-				<property name="test" value="no"/>
-				<echo>"No change: don't test"</echo>
+				<antcallback target="test" return="status, msg" />
+				<waitfor maxwait="30" maxwaitunit="second">
+				        <available file="${resultsDir}\${newResults}.html"/>
+				</waitfor>
+				<readTest file="${resultsDir}\${newResults}.html" type="status" />
+				<property name="status" value="${ret}" />
+				<readTest file="${resultsDir}\${newResults}.html" type="msg" />
+				<property name="msg" value="${ret}" />
+
+				<mail mailhost="smtp.gmail.com" mailport="587" ssl="true" subject="Booking Boss build status for ${time}: ${status}"
+					user="gerard@bookingboss.com" password="coldfusion">
+					<from address="gerard@bookingboss.com"/>
+					<to address="gerard@bookingboss.com"/>
+					<message>The ${buildname} nightly build has completed.${line.separator} Status: ${status}.${line.separator} Message: ${msg}</message>
+					<attachments>
+			    		<fileset dir="${resultsDir}">
+							<include name="${newResults}.html"/>
+						</fileset>
+					</attachments>
+				</mail>
 			</then>
 			<else>
-				<echo>"Oooo upgrades: test time"</echo>
+				<mail mailhost="smtp.gmail.com" mailport="587" ssl="true" subject="Booking Boss build status for ${time}: ${status}"
+					user="gerard@bookingboss.com" password="coldfusion">
+					<from address="gerard@bookingboss.com"/>
+					<to address="gerard@bookingboss.com"/>
+					<message>The ${buildname} nightly build has completed.${line.separator} Status: ${status}.${line.separator} Message: ${msg}</message>
+				</mail>
 			</else>
 		</if>
 	</target>
 	
+	<target name="gitpull" depends="initGit" description="Commits all changes to version git">
+		<git command="pull" />
+		<echo>Build complete...</echo>
+		<if>
+			<equals arg1="${ret}" arg2="Already up-to-date." />
+			<then>
+				<property name="status" value="No Change" />
+				<property name="msg" value="Nothing to test" />
+				<property name="test" value="no" />
+				<echo>No change: don't test</echo>
+			</then>
+			<else>
+				<echo>Oooo upgrades: test time</echo>
+			</else>
+		</if>
+	</target>
 	
-	<target name="test" depends="build" description="start da testing!!" unless="test.set">
+	<target name="test" description="start the testing!!" if="test.set">
 		<echo>"Starting testing"</echo>
 		<selenese 
         	suite="${seleniumDir}\tests\testsuite.cfm"
@@ -51,16 +89,31 @@
 		 />
 	</target>
 	
-	<macrodef name="git">
-		<attribute name="command" />
-		<attribute name="dir" default="" />
-		<element name="args" optional="true" />
-		<sequential>
-			<echo message="git @{command}"/>
-			<exec executable="git" dir="@{dir}" resolveexecutable="false" outputproperty="ret"> <!-- spawn="true" -->
-				<arg value="@{command}" />
-				<args/>
-			</exec>
-		</sequential>
-	</macrodef>	
+	<target name="initRead">
+		<macrodef name="readTest">
+			<attribute name="file" />
+			<attribute name="type" />
+			<sequential>
+				<exec executable="perl" dir="" resolveexecutable="false" outputproperty="ret">
+					<arg value="readTests.pl" />
+					<arg value="@{file}" />
+					<arg value="@{type}" />
+				</exec>
+			</sequential>
+		</macrodef>
+	</target>
+	<target name="initGit">
+		<macrodef name="git">
+			<attribute name="command" />
+			<attribute name="dir" default="" />
+			<element name="args" optional="true" />
+			<sequential>
+				<echo message="git @{command}"/>
+				<exec executable="git" dir="@{dir}" resolveexecutable="false" outputproperty="ret">
+					<arg value="@{command}" />
+					<!--args/-->
+				</exec>
+			</sequential>
+		</macrodef>
+	</target>
 </project>

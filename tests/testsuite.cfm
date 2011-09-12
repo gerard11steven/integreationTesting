@@ -2,6 +2,5 @@
         <tbody>
         <tr><td><b>Test Suite </b> </td> </tr>
         <tr><td><a href="test1.cfm">Test1</a></td></tr>
-        <tr><td><a href="tedst2">Test1</a></td></tr>
         </tbody>
     </table>
