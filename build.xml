@@ -45,9 +45,9 @@
 				<readTestMessage file="${resultsDir}\${newResults}.html" />
 
 				<mail mailhost="smtp.gmail.com" mailport="587" ssl="true" subject="Booking Boss build status for ${time}: ${status}"
-					user="gerard@bookingboss.com" password="coldfusion">
-					<from address="gerard@bookingboss.com"/>
-					<to address="gerard@bookingboss.com"/>
+					user="email" password="password">
+					<from address="email"/>
+					<to address="email"/>
 					<message>The ${buildname} nightly build has completed.${line.separator}Status: ${status}.${line.separator}Results: ${line.separator}${msg}</message>
 					<attachments>
 			    		<fileset dir="${resultsDir}">
@@ -58,9 +58,9 @@
 			</then>
 			<else>
 				<mail mailhost="smtp.gmail.com" mailport="587" ssl="true" subject="Booking Boss build status for ${time}: ${status}"
-					user="gerard@bookingboss.com" password="coldfusion">
-					<from address="gerard@bookingboss.com"/>
-					<to address="gerard@bookingboss.com"/>
+					user="email" password="password">
+					<from address="email"/>
+					<to address="email"/>
 					<message>The ${buildname} nightly build has completed.${line.separator}Status: ${status}.${line.separator}Message: ${msg}</message>
 				</mail>
 			</else>
